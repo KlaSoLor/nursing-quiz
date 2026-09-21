@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nursing Practice Exam (24 Questions)</title>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; margin: 0; padding: 20px; color: #333; }
+  .quiz-container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  h1 { text-align: center; color: #1e3a8a; margin-bottom: 5px; }
+  .subtitle { text-align: center; color: #64748b; margin-bottom: 25px; font-weight: 500; }
+  .unit-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+  .question-card { border-bottom: 1px solid #e2e8f0; padding: 20px 0; }
+  .question-text { font-size: 16px; font-weight: 600; margin-bottom: 12px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; text-align: left; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+  .option-btn:hover:not(.disabled) { background: #f1f5f9; border-color: #94a3b8; }
+  .correct { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #15803d !important; font-weight: bold; }
+  .wrong { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+  .rationale { margin-top: 10px; padding: 12px; background: #f8fafc; border-left: 4px solid #3b82f6; border-radius: 4px; font-size: 13.5px; line-height: 1.4; display: none; }
+  .disabled { cursor: default; }
+  .score-box { text-align: center; padding: 20px; background: #1e3a8a; color: white; border-radius: 10px; margin-bottom: 20px; }
+  .score-box h2 { margin: 0; font-size: 28px; }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="score-box">
+    <div>Total Score</div>
+    <h2><span id="current-score">0</span> / 24</h2>
+  </div>
+  <h1>Clinical Nursing Practice Exam</h1>
+  <p class="subtitle">Click your answer to reveal instant feedback and checklist explanations</p>
+
+  <div id="quiz-list"></div>
+</div>
+
+<script>
+const quizData = [
+  // Unit 1
+  {
+    unit: "Unit 1: EBP & Infection Control",
+    q: "1. A nurse prepares to care for an inpatient diagnosed with active Pulmonary Tuberculosis. Which transmission precaution and PPE protocol is mandatory?",
+    options: [
+      "Standard surgical mask with eye protection, placed in a routine private room",
+      "Fit-tested N95 respirator, placed in an Airborne Infection Isolation Room (Negative Pressure Room) with door closed",
+      "Isolation gown and non-sterile gloves only, as transmission is strictly by contact",
+      "Surgical mask and hair net, keeping the corridor door open for continuous cross-ventilation"
+    ],
+    answer: 1,
+    exp: "M. tuberculosis droplets are < 5 microns and float in the air for hours. It mandates Airborne Precautions: negative pressure room with HEPA filter and a fit-tested N95 respirator."
+  },
+  {
+    unit: "Unit 1: EBP & Infection Control",
+    q: "2. What is the correct sequence for safely removing PPE (Doffing) to prevent self-contamination?",
+    options: [
+      "Gown -> Mask -> Gloves -> Goggles -> Hand hygiene",
+      "Gloves -> Goggles / Face shield -> Gown -> Mask / Respirator -> Hand hygiene",
+      "Mask -> Gloves -> Goggles -> Gown -> Hand hygiene",
+      "Goggles -> Gown -> Mask -> Gloves -> Hand hygiene"
+    ],
+    answer: 1,
+    exp: "Doffing sequence goes from dirtiest to cleanest: Gloves -> Goggles/Face Shield -> Gown -> Mask/Respirator -> Hand Hygiene immediately."
+  },
+  {
+    unit: "Unit 1: EBP & Infection Control",
+    q: "3. When preparing and establishing a sterile field on a procedure table, which action adheres strictly to aseptic technique guidelines?",
+    options: [
+      "Open the first flap (distal flap) toward yourself over the front of the table",
+      "Reach your bare hands directly across the open field to organize the supplies quickly",
+      "Consider the outer 1-inch (2.5 cm) margin around the sterile drape to be contaminated",
+      "Adjust the procedure tray below waist level to ensure an unobstructed view"
+    ],
+    answer: 2,
+    exp: "The outer 1-inch perimeter of a sterile field is always considered non-sterile (contaminated). Open distal flap away from you first, and never reach across the field."
+  },
+  {
+    unit: "Unit 1: EBP & Infection Control",
+    q: "4. When pouring sterile normal saline solution into a sterile container, which technique preserves sterility?",
+    options: [
+      "Hold the bottle with the label facing into the palm, pouring from 4–6 inches above the tray without splashing",
+      "Rest the outer lip of the bottle directly against the rim of the sterile bowl to avoid splashing",
+      "Place the removed bottle cap upside down with the sterile inner surface resting on the tabletop",
+      "Pour from a height of at least 15 inches above the sterile field to create a steady high-flow stream"
+    ],
+    answer: 0,
+    exp: "Checklist mandates: Hold bottle with label facing palm (keeps label clean), pour 4–6 inches above container to avoid splash contamination, and never touch the rim."
+  },
+
+  // Unit 2
+  {
+    unit: "Unit 2: Vital Signs & Measurements",
+    q: "5. In which patient is measuring body temperature via the oral route strictly contraindicated?",
+    options: [
+      "An adult patient admitted with severe acute diarrhea",
+      "A 4-year-old child and a disoriented patient with active convulsions",
+      "A patient who underwent an uncomplicated appendectomy 48 hours ago",
+      "A hypertensive patient receiving regular oral antihypertensive therapy"
+    ],
+    answer: 1,
+    exp: "Oral temperature is contraindicated in children < 6 years, comatose/confused patients, mouth breathers, and patients with active seizures due to injury/biting risk."
+  },
+  {
+    unit: "Unit 2: Vital Signs & Measurements",
+    q: "6. While palpating a peripheral radial pulse, the nurse notes that the pulse is weak, thready, and easily obliterated with light pressure. How is this documented?",
+    options: [
+      "0",
+      "1+",
+      "2+",
+      "3+"
+    ],
+    answer: 1,
+    exp: "Pulse strength scale: 0 = Absent, 1+ = Weak / thready / easily obliterated, 2+ = Normal, 3+ = Full / strong, 4+ = Bounding."
+  },
+  {
+    unit: "Unit 2: Vital Signs & Measurements",
+    q: "7. During manual blood pressure assessment, the radial pulse ceases at 120 mmHg upon cuff inflation. To what pressure should the cuff be reinflated during auscultation?",
+    options: [
+      "130 mmHg",
+      "140 mmHg",
+      "150 mmHg",
+      "180 mmHg"
+    ],
+    answer: 2,
+    exp: "Inflate cuff 30 mmHg above estimated systolic pressure (where radial pulse vanished) to avoid missing an auscultatory gap: 120 + 30 = 150 mmHg."
+  },
+  {
+    unit: "Unit 2: Vital Signs & Measurements",
+    q: "8. An adult inpatient presents with a National Early Warning Score (NEWS) of 6. What is the immediate nursing escalation requirement?",
+    options: [
+      "Reassess vital signs routinely every 12 hours",
+      "Record vital signs every 4 hours and provide supportive rest",
+      "Immediately notify the medical team / PERRT, and increase vital signs monitoring to at least every 1 hour",
+      "Discharge the patient home because clinical parameters indicate stability"
+    ],
+    answer: 2,
+    exp: "NEWS of 5–6 (or a single score of 3) indicates medium risk requiring urgent doctor/PERRT review and vital sign monitoring escalated to at least q1h."
+  },
+
+  // Unit 3
+  {
+    unit: "Unit 3: Personal Care & Hygiene",
+    q: "9. Before initiating mouth care for an unconscious patient lying in bed, what clinical assessment must the nurse prioritize first?",
+    options: [
+      "Core body temperature",
+      "Gag reflex",
+      "Daily caloric intake",
+      "Lower extremity pulse amplitude"
+    ],
+    answer: 1,
+    exp: "Unconscious patients have a high risk of aspiration. Assessing the gag reflex prior to oral care is the top safety step on the checklist."
+  },
+  {
+    unit: "Unit 3: Personal Care & Hygiene",
+    q: "10. When administering a tepid sponge bath to reduce high fever, which nursing action is physiologically correct?",
+    options: [
+      "Utilize ice-cold water to induce immediate cutaneous vasoconstriction",
+      "Wipe outward from the trunk toward the distal fingers and toes",
+      "Place damp washcloths over large superficial vessels (groin, axillae, neck) for 3–5 minutes and cease immediately if shivering occurs",
+      "Vigorously rub the anterior chest in small circular motions"
+    ],
+    answer: 2,
+    exp: "Lukewarm/tepid water is used. Washcloths are left over high-blood flow areas (groin, axillae, neck) for 3–5 mins. Stop immediately if shivering starts (shivering spikes body temperature)."
+  },
+  {
+    unit: "Unit 3: Personal Care & Hygiene",
+    q: "11. During female perineal care (flushing procedure), which anatomical structures are cleansed with cotton balls 2 and 3 respectively?",
+    options: [
+      "Mons pubis, followed by the nearby labia majora",
+      "Labia majora on the distant side, followed by the labia majora on the near side",
+      "Labia minora on the distant side, followed by the labia minora on the near side",
+      "Urethral meatus, followed downward toward the anus"
+    ],
+    answer: 1,
+    exp: "Cleansing order: 1 = Pubic area, 2 = Distant labia majora, 3 = Near labia majora, 4 = Distant labia minora, 5 = Near labia minora, 6 = Midline to anus."
+  },
+  {
+    unit: "Unit 3: Personal Care & Hygiene",
+    q: "12. When preparing and applying a hot water bag for heat therapy, which procedure complies with the checklist?",
+    options: [
+      "Fill the container completely to 100% volume with boiling water",
+      "Mix tap water and hot water at a 1:2 ratio, fill 2/3 full, expel trapped air, secure lid, test for leaks, and wrap in a protective cloth cover",
+      "Apply the bare rubber bag directly onto unprotected skin for 60 consecutive minutes",
+      "Maintain the application for 90 minutes without removing"
+    ],
+    answer: 1,
+    exp: "Checklist: Mix normal water:hot water 1:2, fill 2/3 full, lay flat to expel air to neck, seal tightly, invert to check leak, wrap in cloth, apply 20–30 mins."
+  },
+
+  // Unit 4
+  {
+    unit: "Unit 4: Nutrition & GI Tube Therapy",
+    q: "13. What is the standard anatomical measurement method for determining the insertion depth of an NG tube in an adult?",
+    options: [
+      "Measure from the bridge of the nose straight down to the umbilicus",
+      "The NEX method: from the tip of the nose to the earlobe, and then to the xiphoid process",
+      "Measure from the corner of the mouth to the mastoid process and sternal notch",
+      "Measure from the suprasternal notch to the anterior superior iliac spine"
+    ],
+    answer: 1,
+    exp: "NEX method (Nose -> Earlobe -> Xiphoid process) ensures the tip of the nasogastric tube reliably lands in the stomach."
+  },
+  {
+    unit: "Unit 4: Nutrition & GI Tube Therapy",
+    q: "14. Before tube feeding, the nurse aspirates a Gastric Residual Volume (GRV) exceeding 50 mL. What is the appropriate initial action?",
+    options: [
+      "Discard the aspirate, rapidly flush 100 mL of cold water, and administer the feed",
+      "Re-instill the residual content, temporarily withhold the feeding, and recheck the GRV in 1 hour",
+      "Remove the NG tube immediately and insert a larger French catheter",
+      "Force the full prescribed feeding into the tube using the syringe plunger"
+    ],
+    answer: 1,
+    exp: "Per course guidelines: If gastric residual exceeds 50 mL, hold the feeding, return the gastric content to avoid electrolyte loss, and recheck in 1 hour."
+  },
+  {
+    unit: "Unit 4: Nutrition & GI Tube Therapy",
+    q: "15. Which statement accurately distinguishes Total Parenteral Nutrition (TPN) from Peripheral Parenteral Nutrition (PPN)?",
+    options: [
+      "PPN delivers high-glucose hypertonic solutions via a central venous catheter for long-term support",
+      "TPN is administered via a peripheral cannula for short-term support lasting less than 7 days",
+      "TPN is a hypertonic, nutritionally complete solution infused via a central line; PPN is lower in concentration and given via peripheral veins for short-term management",
+      "PPN requires a 0.22-micron in-line filter specifically for infusing lipid emulsions"
+    ],
+    answer: 2,
+    exp: "TPN contains full nutrition, is hypertonic, and requires central vein access (SVC). PPN is less concentrated, used for short-term (< 7–14 days) via peripheral lines."
+  },
+  {
+    unit: "Unit 4: Nutrition & GI Tube Therapy",
+    q: "16. Which fatal condition is characterized by severe hypophosphatemia, fluid shifts, and electrolyte collapse when nutrition is reintroduced to a malnourished patient?",
+    options: [
+      "Dumping syndrome",
+      "Refeeding syndrome",
+      "Zollinger-Ellison syndrome",
+      "Superior mesenteric artery syndrome"
+    ],
+    answer: 1,
+    exp: "Refeeding syndrome occurs upon feeding severely starved patients; insulin surges trigger massive cellular uptake of phosphate, potassium, and magnesium leading to cardiac failure."
+  },
+
+  // Unit 5
+  {
+    unit: "Unit 5: Perioperative Care",
+    q: "17. A surgery that must be performed within 24–30 hours to prevent severe complications (e.g., closed fracture repair) is classified by timing as:",
+    options: [
+      "Elective surgery",
+      "Urgent surgery",
+      "Emergency surgery",
+      "Palliative surgery"
+    ],
+    answer: 1,
+    exp: "Urgent surgery is needed within 24–30 hours. Elective is scheduled in advance. Emergency requires immediate intervention to save life or limb."
+  },
+  {
+    unit: "Unit 5: Perioperative Care",
+    q: "18. Following spinal anesthesia, why is the patient instructed to remain supine flat in bed without a pillow for 8–12 hours?",
+    options: [
+      "To prevent involuntary vomiting and aspiration",
+      "To minimize the risk of cerebrospinal fluid (CSF) leakage and post-dural puncture headache",
+      "To avoid severe postoperative hypothermia",
+      "To reduce incisional tension across abdominal musculature"
+    ],
+    answer: 1,
+    exp: "Lying flat for 8–12 hours prevents CSF leakage through the dural puncture site, which otherwise causes post-dural puncture headaches (PDPH)."
+  },
+  {
+    unit: "Unit 5: Perioperative Care",
+    q: "19. What physiological complication directly results from postoperative hypothermia (< 36.0°C) with severe shivering?",
+    options: [
+      "Resting metabolic rate and oxygen consumption surge by 4–5 times, increasing the risk of myocardial ischemia",
+      "Widespread systemic vasodilation causing acute hypotensive crisis",
+      "Accelerated platelet aggregation that completely eliminates surgical bleeding risk",
+      "Enhanced cellular phagocytosis and rapid incisional epithelialization"
+    ],
+    answer: 0,
+    exp: "Hypothermia causes shivering, which surges oxygen demand 4–5 times, leads to respiratory acidosis, impairs clotting, and increases myocardial infarction (MI) risk."
+  },
+  {
+    unit: "Unit 5: Perioperative Care",
+    q: "20. Under the D-METHOD discharge planning framework, what do the components 'E' and 'H' represent?",
+    options: [
+      "Exercise and Hospital",
+      "Environment (home safety adaptations) and Health (health promotion and restrictions)",
+      "Emergency contact and Hygiene",
+      "Evaluation and Hormonal replacement"
+    ],
+    answer: 1,
+    exp: "D-METHOD: D = Diagnosis, M = Medication, E = Environment, T = Treatment, H = Health promotion, O = Outpatient follow-up, D = Diet."
+  },
+
+  // Unit 6
+  {
+    unit: "Unit 6: Wound Care & Bandaging",
+    q: "21. A surgical incision cleanly closed in the OR with well-approximated edges using dermal sutures or staples heals primarily through:",
+    options: [
+      "Primary intention",
+      "Secondary intention",
+      "Tertiary intention",
+      "Delayed primary intention"
+    ],
+    answer: 0,
+    exp: "Primary intention involves cleanly approximated edges with sutures/staples, minimal tissue loss, minimal granulation, and minimal scarring."
+  },
+  {
+    unit: "Unit 6: Wound Care & Bandaging",
+    q: "22. According to modern wound management and the TIME framework, which dressing category is indicated for a cavity wound with high exudate?",
+    options: [
+      "Polyurethane transparent film",
+      "Alginate or Hydrofiber dressing",
+      "Amorphous Hydrogel",
+      "Non-adherent thin contact layer"
+    ],
+    answer: 1,
+    exp: "Alginates/Hydrofibers absorb up to 20x their weight in fluid and form a gel, making them ideal for heavy exudate and deep cavity wounds."
+  },
+  {
+    unit: "Unit 6: Wound Care & Bandaging",
+    q: "23. Under the strict non-touch (two-forceps) dressing technique, which instrument is designated to make direct contact with the patient's wound bed?",
+    options: [
+      "Non-toothed forceps only",
+      "Toothed forceps only",
+      "Either forceps interchangeably without restriction",
+      "Non-sterile examination gloves"
+    ],
+    answer: 1,
+    exp: "Non-toothed forceps handle sterile supplies/transfer items from the tray; ONLY toothed forceps touch the patient's wound bed."
+  },
+  {
+    unit: "Unit 6: Wound Care & Bandaging",
+    q: "24. Which procedural step is essential when applying an elastic roller bandage to an injured extremity?",
+    options: [
+      "Hold the bandage roll facing downward and wrap from proximal base to distal tip",
+      "Hold the bandage roll facing upward, wrap from distal tip to proximal base, and secure anchor and end with 2–3 circular turns",
+      "Wrap joint surfaces using a continuous simple circular turn",
+      "Apply maximum tension to occlude arterial pulses and suppress regional edema"
+    ],
+    answer: 1,
+    exp: "Checklist: Bandage roll facing upward, wrap from distal to proximal (promotes venous return), begin and finish with 2–3 circular turns, snug not tight."
+  }
+];
+
+let score = 0;
+const answered = new Set();
+const quizList = document.getElementById("quiz-list");
+const scoreDisplay = document.getElementById("current-score");
+
+quizData.forEach((item, index) => {
+  const card = document.createElement("div");
+  card.className = "question-card";
+
+  const badge = document.createElement("div");
+  badge.className = "unit-badge";
+  badge.textContent = item.unit;
+  card.appendChild(badge);
+
+  const qText = document.createElement("div");
+  qText.className = "question-text";
+  qText.textContent = item.q;
+  card.appendChild(qText);
+
+  const optsDiv = document.createElement("div");
+  optsDiv.className = "options";
+
+  const rationaleDiv = document.createElement("div");
+  rationaleDiv.className = "rationale";
+  rationaleDiv.innerHTML = `<strong>Clinical Rationale:</strong> ${item.exp}`;
+
+  item.options.forEach((opt, optIndex) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+    
+    btn.onclick = () => {
+      if (answered.has(index)) return;
+      answered.add(index);
+
+      const allBtns = optsDiv.querySelectorAll(".option-btn");
+      allBtns.forEach(b => b.classList.add("disabled"));
+
+      if (optIndex === item.answer) {
+        btn.classList.add("correct");
+        score++;
+        scoreDisplay.textContent = score;
+      } else {
+        btn.classList.add("wrong");
+        allBtns[item.answer].classList.add("correct");
+      }
+      rationaleDiv.style.display = "block";
+    };
+
+    optsDiv.appendChild(btn);
+  });
+
+  card.appendChild(optsDiv);
+  card.appendChild(rationaleDiv);
+  quizList.appendChild(card);
+});
+</script>
+
+</body>
+</html>
